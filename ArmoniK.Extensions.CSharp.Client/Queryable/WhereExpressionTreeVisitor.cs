@@ -1456,21 +1456,21 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
     protected override Expression VisitMethodCall(MethodCallExpression node)
     {
       var visited = base.VisitMethodCall(node);
-      if (visited is not MethodCallExpression call || call.Method.DeclaringType?.FullName != "System.MemoryExtensions" ||
-          call.Method.Name != nameof(Enumerable.Contains) || !call.Method.IsGenericMethod)
+      if (visited is not MethodCallExpression call || call.Method.DeclaringType?.FullName != "System.MemoryExtensions"   ||
+          call.Method.Name                                                                != nameof(Enumerable.Contains) || !call.Method.IsGenericMethod)
       {
         return visited;
       }
 
       // Accept the optional comparer argument only when it is left to its default (null)
       var hasDefaultComparer = call.Arguments.Count == 2 || (call.Arguments.Count == 3 && call.Arguments[2] is ConstantExpression
-                                                                                                             {
-                                                                                                               Value: null,
-                                                                                                             });
+                                                                                                               {
+                                                                                                                 Value: null,
+                                                                                                               });
       var source      = UnwrapImplicitConversion(call.Arguments[0]);
       var elementType = call.Method.GetGenericArguments()[0];
       if (!hasDefaultComparer || source is null || !typeof(IEnumerable<>).MakeGenericType(elementType)
-                                                                          .IsAssignableFrom(source.Type))
+                                                                         .IsAssignableFrom(source.Type))
       {
         return visited;
       }
@@ -1483,8 +1483,16 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
     private static Expression? UnwrapImplicitConversion(Expression expression)
       => expression switch
          {
-           MethodCallExpression { Method.Name: "op_Implicit", Arguments.Count: 1 } conversion => conversion.Arguments[0],
-           UnaryExpression { NodeType: ExpressionType.Convert, Method.Name: "op_Implicit" } conversion => conversion.Operand,
+           MethodCallExpression
+           {
+             Method.Name    : "op_Implicit",
+             Arguments.Count: 1,
+           } conversion => conversion.Arguments[0],
+           UnaryExpression
+           {
+             NodeType   : ExpressionType.Convert,
+             Method.Name: "op_Implicit",
+           } conversion => conversion.Operand,
            _ => null,
          };
   }
