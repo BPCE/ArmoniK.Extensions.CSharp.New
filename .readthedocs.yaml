@@ -13,7 +13,7 @@ build:
     pre_build:
       - curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh
       - chmod +x dotnet-install.sh
-      - ./dotnet-install.sh --channel 8.0 --install-dir "$HOME/.dotnet"
+      - ./dotnet-install.sh --channel 10.0 --install-dir "$HOME/.dotnet"
       - DOTNET_ROOT="$HOME/.dotnet" PATH="$PATH":"$HOME/.dotnet":"$HOME/.dotnet/tools" tools/generate-csharp-doc.sh
 
 # Build documentation in the ".docs/" directory with Sphinx
