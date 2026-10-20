@@ -260,7 +260,7 @@ internal static class MockHelper
     {
       if (invocation.Arguments[0] is Method<CreateResultsRequest, CreateResultsResponse> method && method.Name == "CreateResults")
       {
-        var blobs = ((CreateResultsRequest)invocation.Arguments[3]).Results;
+        var blobs = ((CreateResultsRequest)invocation.Arguments[3]!).Results;
         foreach (var blob in blobs)
         {
           if (blob.Name == blobName)

@@ -10,17 +10,17 @@
 
   <ItemGroup>
   <InternalsVisibleTo Include="Tests" />
-    <PackageReference Include="ArmoniK.Api.Client" Version="3.28.3" />
+    <PackageReference Include="ArmoniK.Api.Client" Version="3.29.3" />
     <PackageReference Include="IsExternalInit" Version="1.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.1" />
-    <PackageReference Include="protobuf-net" Version="3.2.52" />
-    <PackageReference Include="System.Text.Json" Version="8.0.6" />
-    <PackageReference Include="System.Linq.Async" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
+    <PackageReference Include="protobuf-net" Version="3.4.30" />
+    <PackageReference Include="System.Text.Json" Version="10.0.13" />
+    <PackageReference Include="System.Linq.Async" Version="7.0.1" />
   </ItemGroup>
 
   <ItemGroup>

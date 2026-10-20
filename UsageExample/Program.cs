@@ -134,28 +134,32 @@ internal class Program
   public static async Task<int> Main(string[] args)
   {
     // Define the options for the application with their description and default value
-    var name = new Option<string>("--name",
-                                  description: "your name.",
-                                  getDefaultValue: () => "unknown user");
+    var name = new Option<string>("--name")
+               {
+                 Description         = "your name.",
+                 DefaultValueFactory = _ => "unknown user",
+               };
 
-    var filePath = new Option<string>("--filepath",
-                                      description: "FilePath to the zip file.",
-                                      getDefaultValue: () => @"..\..\..\..\DynamicWorkerExample\packages\DynamicWorkerExample-v1.0.0.0.zip");
+    var filePath = new Option<string>("--filepath")
+                   {
+                     Description         = "FilePath to the zip file.",
+                     DefaultValueFactory = _ => @"..\..\..\..\DynamicWorkerExample\packages\DynamicWorkerExample-v1.0.0.0.zip",
+                   };
 
     // Describe the application and its purpose
     var rootCommand = new RootCommand("Hello World demo for ArmoniK Extensions.CSharp.\n");
 
     // Add the options to the parser
-    rootCommand.AddOption(filePath);
-    rootCommand.AddOption(name);
+    rootCommand.Options.Add(filePath);
+    rootCommand.Options.Add(name);
 
-    // Configure the handler to call the function that will do the work
-    rootCommand.SetHandler(RunAsync,
-                           filePath,
-                           name);
+    // Configure the action to call the function that will do the work
+    rootCommand.SetAction(parseResult => RunAsync(parseResult.GetValue(filePath)!,
+                                                  parseResult.GetValue(name)!));
 
     // Parse the command line parameters and call the function that represents the application
-    return await rootCommand.InvokeAsync(args)
+    return await rootCommand.Parse(args)
+                            .InvokeAsync()
                             .ConfigureAwait(false);
   }
 }
