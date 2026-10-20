@@ -53,7 +53,7 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
   /// <param name="lambda">the lambda Expression Tree.</param>
   public void Visit(LambdaExpression lambda)
   {
-    Visit(lambda.Body);
+    Visit(new SpanContainsRewriter().Visit(lambda.Body));
 
     if (FilterStack.Count == 2)
     {
@@ -1441,4 +1441,51 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
 
   protected abstract void OnIndexerAccess();
   protected abstract bool PushProperty(MemberExpression member);
+
+  /// <summary>
+  ///   Rewrites MemoryExtensions.Contains(ReadOnlySpan&lt;T&gt;, T) calls into Enumerable.Contains(IEnumerable&lt;T&gt;, T).
+  ///   Since C# 14, first-class span conversions make collection.Contains(x) bind to the span overload
+  ///   when the collection is an array.
+  /// </summary>
+  private sealed class SpanContainsRewriter : ExpressionVisitor
+  {
+    private static readonly MethodInfo EnumerableContains = typeof(Enumerable).GetMethods()
+                                                                              .Single(m => m.Name == nameof(Enumerable.Contains) && m.GetParameters()
+                                                                                                                                     .Length == 2);
+
+    protected override Expression VisitMethodCall(MethodCallExpression node)
+    {
+      var visited = base.VisitMethodCall(node);
+      if (visited is not MethodCallExpression call || call.Method.DeclaringType?.FullName != "System.MemoryExtensions" ||
+          call.Method.Name != nameof(Enumerable.Contains) || !call.Method.IsGenericMethod)
+      {
+        return visited;
+      }
+
+      // Accept the optional comparer argument only when it is left to its default (null)
+      var hasDefaultComparer = call.Arguments.Count == 2 || (call.Arguments.Count == 3 && call.Arguments[2] is ConstantExpression
+                                                                                                             {
+                                                                                                               Value: null,
+                                                                                                             });
+      var source      = UnwrapImplicitConversion(call.Arguments[0]);
+      var elementType = call.Method.GetGenericArguments()[0];
+      if (!hasDefaultComparer || source is null || !typeof(IEnumerable<>).MakeGenericType(elementType)
+                                                                          .IsAssignableFrom(source.Type))
+      {
+        return visited;
+      }
+
+      return Expression.Call(EnumerableContains.MakeGenericMethod(elementType),
+                             source,
+                             call.Arguments[1]);
+    }
+
+    private static Expression? UnwrapImplicitConversion(Expression expression)
+      => expression switch
+         {
+           MethodCallExpression { Method.Name: "op_Implicit", Arguments.Count: 1 } conversion => conversion.Arguments[0],
+           UnaryExpression { NodeType: ExpressionType.Convert, Method.Name: "op_Implicit" } conversion => conversion.Operand,
+           _ => null,
+         };
+  }
 }
