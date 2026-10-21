@@ -67,7 +67,7 @@ jobs:
       run: dotnet build Tests/Tests.csproj -c Release
 
     - name: List built test files
-      run: ls -lR Tests/bin/Release/net8.0
+      run: ls -lR Tests/bin/Release/net10.0
 
     - name: Run Tests
       run: dotnet test Tests/Tests.csproj -c Release --verbosity normal

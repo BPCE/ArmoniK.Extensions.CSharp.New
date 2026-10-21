@@ -30,7 +30,7 @@ if (Test-Path $zipPath) {
 
 # Trigger compilation of the worker
 Write-Host "Build and publish worker"
-dotnet publish --self-contained -c Release -r linux-x64 -f net8.0 .
+dotnet publish --self-contained -c Release -r linux-x64 -f net10.0 .
 
 # Find control-plane IP
 $IP = $(wsl kubectl -n armonik get service ingress -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
