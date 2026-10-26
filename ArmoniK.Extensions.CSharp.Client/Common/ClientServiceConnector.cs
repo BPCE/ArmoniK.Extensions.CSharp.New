@@ -21,6 +21,9 @@ using ArmoniK.Api.Client.Submitter;
 using ArmoniK.Utils.Pool;
 
 using Grpc.Core;
+#if NET5_0_OR_GREATER
+using Grpc.Net.Client;
+#endif
 
 using Microsoft.Extensions.Logging;
 
@@ -61,10 +64,15 @@ public class ClientServiceConnector
 #if NET5_0_OR_GREATER
       async (channel, ct) =>
       {
-        switch (channel.State)
+        if (channel is not GrpcChannel grpcChannel)
+        {
+          return true;
+        }
+
+        switch (grpcChannel.State)
         {
           case ConnectivityState.TransientFailure:
-            await channel.ShutdownAsync()
+            await grpcChannel.ShutdownAsync()
                          .ConfigureAwait(false);
             return false;
           case ConnectivityState.Shutdown:
