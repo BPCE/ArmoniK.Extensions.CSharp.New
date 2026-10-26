@@ -57,9 +57,7 @@ public class ClientServiceConnector
     return new ObjectPool<ChannelBase>(int.MaxValue,
                                        ct => new ValueTask<ChannelBase>(GrpcChannelFactory.CreateChannel(options,
                                                                                                          loggerFactory?.CreateLogger(typeof(ClientServiceConnector)))),
-
                                        (_,
-                                        _) => new ValueTask<bool>(true)
-                                      );
+                                        _) => new ValueTask<bool>(true));
   }
 }
