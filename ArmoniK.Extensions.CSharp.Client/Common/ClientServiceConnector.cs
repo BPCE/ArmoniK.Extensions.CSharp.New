@@ -21,11 +21,11 @@ using ArmoniK.Api.Client.Submitter;
 using ArmoniK.Utils.Pool;
 
 using Grpc.Core;
+
+using Microsoft.Extensions.Logging;
 #if NET5_0_OR_GREATER
 using Grpc.Net.Client;
 #endif
-
-using Microsoft.Extensions.Logging;
 
 namespace ArmoniK.Extensions.CSharp.Client.Common;
 
@@ -62,28 +62,29 @@ public class ClientServiceConnector
                                                                                                          loggerFactory?.CreateLogger(typeof(ClientServiceConnector)))),
 
 #if NET5_0_OR_GREATER
-      async (channel, ct) =>
-      {
-        if (channel is not GrpcChannel grpcChannel)
-        {
-          return true;
-        }
+                                       async (channel,
+                                              ct) =>
+                                       {
+                                         if (channel is not GrpcChannel grpcChannel)
+                                         {
+                                           return true;
+                                         }
 
-        switch (grpcChannel.State)
-        {
-          case ConnectivityState.TransientFailure:
-            await grpcChannel.ShutdownAsync()
-                         .ConfigureAwait(false);
-            return false;
-          case ConnectivityState.Shutdown:
-            return false;
-          case ConnectivityState.Idle:
-          case ConnectivityState.Connecting:
-          case ConnectivityState.Ready:
-          default:
-            return true;
-        }
-      }
+                                         switch (grpcChannel.State)
+                                         {
+                                           case ConnectivityState.TransientFailure:
+                                             await grpcChannel.ShutdownAsync()
+                                                              .ConfigureAwait(false);
+                                             return false;
+                                           case ConnectivityState.Shutdown:
+                                             return false;
+                                           case ConnectivityState.Idle:
+                                           case ConnectivityState.Connecting:
+                                           case ConnectivityState.Ready:
+                                           default:
+                                             return true;
+                                         }
+                                       }
 #else
                                        (_,
                                         _) => new ValueTask<bool>(true)
