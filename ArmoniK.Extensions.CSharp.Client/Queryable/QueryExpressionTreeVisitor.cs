@@ -267,7 +267,7 @@ internal abstract class QueryExpressionTreeVisitor<TSource, TField, TFilterOr, T
     {
       // Custom extension method that sets ArmoniK filter's page size.
       var expression = (ConstantExpression)call.Arguments[1];
-      PageSize = (int)expression.Value;
+      PageSize = (int)expression.Value!;
     }
     else
     {

@@ -356,7 +356,7 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
   }
 
   private void OnConstant(ConstantExpression constant)
-    => FilterStack.Push((constant.Value, constant.Type));
+    => FilterStack.Push((constant.Value!, constant.Type));
 
   private bool OnFieldAccess(MemberExpression member)
   {
@@ -447,7 +447,7 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
     if (expression is MemberExpression member)
     {
       member = GetRightMostMemberExpression(member);
-      return ExpressionContainsLambdaParameter(member.Expression);
+      return member.Expression is not null && ExpressionContainsLambdaParameter(member.Expression);
     }
 
     if (expression is MethodCallExpression call)
