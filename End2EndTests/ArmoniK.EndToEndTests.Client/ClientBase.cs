@@ -73,8 +73,14 @@ public class ClientBase
                                                     true)
                                 .ConfigureAwait(false);
 
-    var filePath = Path.Join(AppContext.BaseDirectory,
-                             @"..\..\..\..\..\packages\ArmoniK.EndToEndTests.Worker-v1.0.0-100.zip");
+    var filePath = Path.Combine(AppContext.BaseDirectory,
+                                "..",
+                                "..",
+                                "..",
+                                "..",
+                                "..",
+                                "packages",
+                                "ArmoniK.EndToEndTests.Worker-v1.0.0-100.zip");
     await Client.BlobService.SendDllBlobAsync(SessionHandle,
                                               WorkerLibrary,
                                               filePath,
