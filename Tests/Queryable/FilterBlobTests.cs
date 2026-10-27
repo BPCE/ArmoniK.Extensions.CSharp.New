@@ -1017,7 +1017,7 @@ public class FilterBlobTests : BaseBlobFilterTests
     var client = new MockedArmoniKClient();
 
     var query = client.BlobService.AsQueryable()
-                      .Where(blobState => Enumerable.Contains((IEnumerable<string>)null!, blobState.BlobId));
+                      .Where(blobState => ((IEnumerable<string>)null!).Contains(blobState.BlobId));
 
     // Execute the query
     var exception = Assert.Throws<InvalidExpressionException>(() => query.ToList());
