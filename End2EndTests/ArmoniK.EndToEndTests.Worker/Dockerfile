@@ -12,4 +12,4 @@ RUN dotnet publish -a "${TARGETARCH}" --self-contained -c Release -f net10.0 .
 FROM ${WORKER_DLL_IMAGE} AS final
 
 ENV ServiceAssemblyPath=/guest
-COPY --from=build /src/End2EndTests\publish\ArmoniK.EndToEndTests.Worker\1.0.0-100 /guest
+COPY --from=build /src/End2EndTests/publish/ArmoniK.EndToEndTests.Worker/1.0.0-100 /guest
