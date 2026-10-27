@@ -142,7 +142,7 @@ internal class Program
 
     var filePath = new Option<string>("--filepath")
                    {
-                     Description         = "FilePath to the zip file.",
+                     Description = "FilePath to the zip file.",
                      DefaultValueFactory = _ => Path.Combine("..",
                                                              "..",
                                                              "..",
