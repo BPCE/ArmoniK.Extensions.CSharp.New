@@ -6,9 +6,8 @@
     <Nullable>enable</Nullable>
 
     <Version>1.0.0-100</Version>
-    <AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
     <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <OutputPath>bin/$(Configuration)/</OutputPath>
     <PublishDir>../publish/$(MSBuildProjectName)/$(Version)/</PublishDir>
     <PublishUrl>../publish/$(MSBuildProjectName)/$(Version)/</PublishUrl>

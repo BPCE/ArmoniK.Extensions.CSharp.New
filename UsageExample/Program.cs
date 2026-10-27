@@ -143,7 +143,13 @@ internal class Program
     var filePath = new Option<string>("--filepath")
                    {
                      Description         = "FilePath to the zip file.",
-                     DefaultValueFactory = _ => @"..\..\..\..\DynamicWorkerExample\packages\DynamicWorkerExample-v1.0.0.0.zip",
+                     DefaultValueFactory = _ => Path.Combine("..",
+                                                             "..",
+                                                             "..",
+                                                             "..",
+                                                             "DynamicWorkerExample",
+                                                             "packages",
+                                                             "DynamicWorkerExample-v1.0.0.0.zip"),
                    };
 
     // Describe the application and its purpose

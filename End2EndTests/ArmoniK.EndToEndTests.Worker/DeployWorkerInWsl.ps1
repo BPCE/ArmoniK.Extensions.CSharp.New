@@ -52,4 +52,4 @@ catch{
 
 # Write the control-plane url in appSettings client
 Write-Host "Set control plane url $url to $appSettingsPath"
-$appSettings | ConvertTo-Json -Depth 4 | Out-File $appSettingsPath
+$appSettings | ConvertTo-Json -Depth 4 | Out-File -Encoding utf8 $appSettingsPath
