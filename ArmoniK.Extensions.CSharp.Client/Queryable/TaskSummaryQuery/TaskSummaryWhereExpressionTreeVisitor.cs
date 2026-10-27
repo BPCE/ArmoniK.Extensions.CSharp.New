@@ -62,8 +62,8 @@ internal class TaskSummaryWhereExpressionTreeVisitor : WhereExpressionTreeVisito
 
   protected override bool PushProperty(MemberExpression member)
   {
-    Type memberType;
-    if (member.Expression.Type == typeof(TaskConfiguration))
+    Type? memberType;
+    if (member.Expression!.Type == typeof(TaskConfiguration))
     {
       if (TaskSummaryMaps.MemberName2Type_.TryGetValue(member.Member.Name,
                                                        out memberType) && TaskSummaryMaps.MemberName2OptionEnumField_.TryGetValue(member.Member.Name,

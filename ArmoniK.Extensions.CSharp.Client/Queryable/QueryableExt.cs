@@ -81,7 +81,7 @@ public static class QueryableExt
     var collection = (IAsyncEnumerable<object>)source.Provider.Execute(Expression.Call(null,
                                                                                        new Func<IQueryable<TaskSummary>, IAsyncEnumerable<TaskState>>(AsTaskDetailed)
                                                                                          .Method,
-                                                                                       source.Expression));
+                                                                                       source.Expression))!;
     return collection.Cast<TaskState>();
   }
 }

@@ -94,7 +94,7 @@ internal class ArmoniKQueryable<TSource> : IOrderedQueryable<TSource>, IAsyncEnu
       return array.GetEnumerator();
     }
 
-    throw new InvalidOperationException($"The query returned an unexpected instance type: {result.GetType()}");
+    throw new InvalidOperationException($"The query returned an unexpected instance type: {result?.GetType()}");
   }
 
   IEnumerator IEnumerable.GetEnumerator()

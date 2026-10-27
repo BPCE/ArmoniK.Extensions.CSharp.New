@@ -45,7 +45,7 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
   where TFilterOr : new()
   where TFilterAnd : new()
 {
-  protected readonly Stack<(object, Type)> FilterStack = new();
+  protected readonly Stack<(object?, Type)> FilterStack = new();
 
   /// <summary>
   ///   Visit the lambda Expression Tree describing the filter.
@@ -69,7 +69,7 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
       }
       else
       {
-        FilterStack.Push((CreateFilterFromStack(obj)!, typeof(bool)));
+        FilterStack.Push((CreateFilterFromStack(obj), typeof(bool)));
       }
     }
     else
@@ -106,10 +106,10 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
       return default;
     }
 
-    return (TFilterOr)filters.Item1;
+    return (TFilterOr?)filters.Item1;
   }
 
-  private TFilterOr CreateFilterFromStack(object filter)
+  private TFilterOr CreateFilterFromStack(object? filter)
   {
     var orNode = new TFilterOr();
     if (filter is TFilterOr filterOr)
@@ -447,7 +447,7 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
     if (expression is MemberExpression member)
     {
       member = GetRightMostMemberExpression(member);
-      return ExpressionContainsLambdaParameter(member.Expression);
+      return member.Expression is not null && ExpressionContainsLambdaParameter(member.Expression);
     }
 
     if (expression is MethodCallExpression call)
@@ -827,9 +827,13 @@ internal abstract class WhereExpressionTreeVisitor<TField, TFilterOr, TFilterAnd
       // filter of the form : collection.Contains(field)
       FilterStack.Pop();                       // Pop the enum field
       var (collection, _) = FilterStack.Pop(); // Pop the collection
+      if (collection is not IEnumerable enumerable)
+      {
+        throw new InvalidExpressionException("Invalid filter: method Contains called on a null collection");
+      }
 
       OnCollectionContains(field,
-                           ((IEnumerable)collection).Cast<object>(),
+                           enumerable.Cast<object>(),
                            notOp);
     }
     else

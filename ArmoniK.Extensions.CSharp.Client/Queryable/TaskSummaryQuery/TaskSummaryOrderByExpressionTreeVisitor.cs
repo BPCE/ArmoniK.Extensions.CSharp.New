@@ -47,8 +47,8 @@ internal class TaskSummaryOrderByExpressionTreeVisitor : OrderByExpressionTreeVi
                    };
           }
 
-          if (member.Expression.Type == typeof(TaskConfiguration) && TaskSummaryMaps.MemberName2OptionEnumField_.TryGetValue(member.Member.Name,
-                                                                                                                             out var optionField))
+          if (member.Expression!.Type == typeof(TaskConfiguration) && TaskSummaryMaps.MemberName2OptionEnumField_.TryGetValue(member.Member.Name,
+                                                                                                                              out var optionField))
           {
             return new TaskField
                    {

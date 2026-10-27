@@ -1012,6 +1012,20 @@ public class FilterBlobTests : BaseBlobFilterTests
   }
 
   [Test]
+  public void ContainsOnNullBlobIdCollection()
+  {
+    var client = new MockedArmoniKClient();
+
+    var query = client.BlobService.AsQueryable()
+                      .Where(blobState => ((IEnumerable<string>)null!).Contains(blobState.BlobId));
+
+    // Execute the query
+    var exception = Assert.Throws<InvalidExpressionException>(() => query.ToList());
+    Assert.That(exception!.InnerException,
+                Is.TypeOf<InvalidExpressionException>());
+  }
+
+  [Test]
   public void BlobFilterWithPageSize()
   {
     var client = new MockedArmoniKClient();

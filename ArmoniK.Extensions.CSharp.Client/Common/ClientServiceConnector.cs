@@ -57,29 +57,7 @@ public class ClientServiceConnector
     return new ObjectPool<ChannelBase>(int.MaxValue,
                                        ct => new ValueTask<ChannelBase>(GrpcChannelFactory.CreateChannel(options,
                                                                                                          loggerFactory?.CreateLogger(typeof(ClientServiceConnector)))),
-
-#if NET5_0_OR_GREATER
-      async (channel, ct) =>
-      {
-        switch (channel.State)
-        {
-          case ConnectivityState.TransientFailure:
-            await channel.ShutdownAsync()
-                         .ConfigureAwait(false);
-            return false;
-          case ConnectivityState.Shutdown:
-            return false;
-          case ConnectivityState.Idle:
-          case ConnectivityState.Connecting:
-          case ConnectivityState.Ready:
-          default:
-            return true;
-        }
-      }
-#else
                                        (_,
-                                        _) => new ValueTask<bool>(true)
-#endif
-                                      );
+                                        _) => new ValueTask<bool>(true));
   }
 }
