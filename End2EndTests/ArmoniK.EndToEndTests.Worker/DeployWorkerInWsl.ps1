@@ -39,7 +39,7 @@ $port = $ingress.spec.ports[-1].port
 $url = "http://" + $IP + ":" + $port
 
 # Parse appSettings.json of the client
-$appSettingsPath = "..\ArmoniK.EndToEndTests.Client\appSettings.json"
+$appSettingsPath = "..\ArmoniK.EndToEndTests.Client\appsettings.json"
 try
 {
 	$appSettings = Get-Content $appSettingsPath -Raw | ConvertFrom-Json
