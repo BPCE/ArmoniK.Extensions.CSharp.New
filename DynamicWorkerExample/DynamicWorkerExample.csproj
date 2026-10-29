@@ -7,7 +7,6 @@
     <Version>1.0.0.0</Version>
     <AppendRuntimeIdentifierToOutputPath>true</AppendRuntimeIdentifierToOutputPath>
     <AppendTargetFrameworkToOutputPath>true</AppendTargetFrameworkToOutputPath>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <OutputPath>bin/$(Configuration)/</OutputPath>
     <PublishDir>./publish/$(MSBuildProjectName)/$(Version)/</PublishDir>
     <PublishUrl>./publish/$(MSBuildProjectName)/$(Version)/</PublishUrl>

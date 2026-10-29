@@ -39,7 +39,7 @@ $port = $ingress.spec.ports[-1].port
 $url = "http://" + $IP + ":" + $port
 
 # Parse appSettings.json of the client
-$appSettingsPath = "..\ArmoniK.EndToEndTests.Client\appSettings.json"
+$appSettingsPath = "..\ArmoniK.EndToEndTests.Client\appsettings.json"
 try
 {
 	$appSettings = Get-Content $appSettingsPath -Raw | ConvertFrom-Json
@@ -52,4 +52,4 @@ catch{
 
 # Write the control-plane url in appSettings client
 Write-Host "Set control plane url $url to $appSettingsPath"
-$appSettings | ConvertTo-Json -Depth 4 | Out-File $appSettingsPath
+$appSettings | ConvertTo-Json -Depth 4 | Out-File -Encoding utf8 $appSettingsPath

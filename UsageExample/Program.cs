@@ -51,7 +51,7 @@ internal class Program
 
     var logger = factory.CreateLogger<Program>();
 
-    var builder = new ConfigurationBuilder().SetBasePath(Directory.GetCurrentDirectory())
+    var builder = new ConfigurationBuilder().SetBasePath(AppContext.BaseDirectory)
                                             .AddJsonFile("appsettings.json",
                                                          false)
                                             .AddEnvironmentVariables();
@@ -142,8 +142,15 @@ internal class Program
 
     var filePath = new Option<string>("--filepath")
                    {
-                     Description         = "FilePath to the zip file.",
-                     DefaultValueFactory = _ => @"..\..\..\..\DynamicWorkerExample\packages\DynamicWorkerExample-v1.0.0.0.zip",
+                     Description = "FilePath to the zip file.",
+                     DefaultValueFactory = _ => Path.Combine(AppContext.BaseDirectory,
+                                                             "..",
+                                                             "..",
+                                                             "..",
+                                                             "..",
+                                                             "DynamicWorkerExample",
+                                                             "packages",
+                                                             "DynamicWorkerExample-v1.0.0.0.zip"),
                    };
 
     // Describe the application and its purpose

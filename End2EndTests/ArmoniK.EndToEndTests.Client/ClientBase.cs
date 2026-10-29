@@ -78,7 +78,6 @@ public class ClientBase
                                 "..",
                                 "..",
                                 "..",
-                                "..",
                                 "packages",
                                 "ArmoniK.EndToEndTests.Worker-v1.0.0-100.zip");
     await Client.BlobService.SendDllBlobAsync(SessionHandle,
